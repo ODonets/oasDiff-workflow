@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - id: test
-        uses: ODonets/oasDiff-action@master
+        uses: ODonets/oasDiff-action@main
 
 
 
