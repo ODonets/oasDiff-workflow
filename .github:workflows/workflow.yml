@@ -1,0 +1,23 @@
+# API-Workflow 2.1.0
+name: The API Workflow
+on: push
+env:
+  BUNDLED_ARTIFACT_NAME: bundled-openapi
+  BUNDLED_ARTIFACT_PATH: oas
+  BUNDLED_ARTIFACT_FILENAME: openapi-bundled.yml
+
+
+jobs:
+  openapi-diff:
+    runs-on: ubuntu-latest
+    name: A job which compares tow OAS
+    steps:
+      - uses: actions/checkout@v2
+      - id: test
+        uses: ODonets/oasDiff-action@v2
+
+
+
+
+
+

@@ -1,0 +1,1016 @@
+openapi: 3.0.0
+info:
+  version: ${project.version}
+  title: Room Management Beispiel-API
+  description: Diese OpenAPI-Spezifikation dient als Inspiration für alle Entwickelnde,
+    die selber eine Spezifikation schreiben und ein Copy-Paste Beispiel brauchen.
+  contact:
+    email: api@nordlb.de
+  license:
+    name: MIT
+externalDocs:
+  description: Fachliche API-Dokumentation
+  url: https://docs.api.nordlb.de/room-management-example
+servers:
+- url: https://tent.api.nordlb.de/room-management-example
+  description: TENT-Instanz
+- url: https://tabs.api.nordlb.de/room-management-example
+  description: TABS-Instanz
+- url: https://prep.api.nordlb.de/room-management-example
+  description: PREP-Instanz
+- url: https://prod.api.nordlb.de/room-management-example
+  description: PROD-Instanz
+security:
+- SecurityToken: []
+tags:
+- name: buildings
+  description: Alle Endpunkte, die Gebäude betreffen.
+- name: floors
+  description: Alle Endpunkte, die Ebenen in Gebäuden betreffen.
+- name: rooms
+  description: Alle Endpunkte, die Räume auf Ebenen betreffen.
+- name: categories
+  description: Alle Endpunkte, die Kategorien für Räume betreffen.
+- name: bookings
+  description: Alle Endpunkte, die Buchungen von Räumen betreffen.
+paths:
+  /rooms:
+    get:
+      description: Get all rooms
+      operationId: getRooms
+      tags:
+      - rooms
+      parameters:
+      - $ref: '#/components/parameters/RoomName'
+      - $ref: '#/components/parameters/RoomNumber'
+      - $ref: '#/components/parameters/RoomCategoryId'
+      - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          $ref: '#/components/responses/RoomCollection'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+    post:
+      description: Create a room
+      operationId: createRoom
+      tags:
+      - rooms
+      requestBody:
+        $ref: '#/components/requestBodies/Room'
+      responses:
+        '201':
+          $ref: '#/components/responses/Room'
+        '422':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+  /rooms/{roomId}:
+    parameters:
+    - $ref: '#/components/parameters/RoomId'
+    get:
+      description: Info for a specific Room
+      operationId: getRoomById
+      tags:
+      - rooms
+      responses:
+        '200':
+          $ref: '#/components/responses/Room'
+        '404':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+    put:
+      description: update a specific room
+      operationId: updateRoom
+      tags:
+      - rooms
+      requestBody:
+        $ref: '#/components/requestBodies/Room'
+      responses:
+        '201':
+          $ref: '#/components/responses/Room'
+        '404':
+          $ref: '#/components/responses/DefaultProblem'
+        '422':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+    delete:
+      description: delete a room
+      operationId: deleteRoom
+      tags:
+      - rooms
+      responses:
+        '204':
+          $ref: '#/components/responses/DeletedObject'
+        '404':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+  /rooms/search:
+    post:
+      description: '[GET with body payload] - no resources created: Returns all rooms
+        matching the query passed as request input payload.
+
+        '
+
+      operationId: searchRoom
+      tags:
+      - rooms
+      requestBody:
+        $ref: '#/components/requestBodies/RoomSearch'
+      responses:
+        '200':
+          $ref: '#/components/responses/RoomCollection'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+  /buildings:
+    get:
+      description: Get all buildings
+      operationId: getBuildings
+      tags:
+      - buildings
+      parameters:
+      - $ref: '#/components/parameters/BuildingName'
+      - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          $ref: '#/components/responses/BuildingCollection'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+  /buildings/{buildingId}:
+    parameters:
+    - $ref: '#/components/parameters/BuildingId'
+    get:
+      description: Info for a specific building
+      operationId: getBuildingById
+      tags:
+      - buildings
+      responses:
+        '200':
+          $ref: '#/components/responses/Building'
+        '404':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+    post:
+      description: update a specific building
+      operationId: updateBuilding
+      tags:
+      - buildings
+      requestBody:
+        $ref: '#/components/requestBodies/Building'
+      responses:
+        '201':
+          $ref: '#/components/responses/Building'
+        '404':
+          $ref: '#/components/responses/DefaultProblem'
+        '422':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+    delete:
+      description: delete a building. Updated Description.
+      operationId: deleteBuilding
+      tags:
+      - buildings
+      responses:
+        '204':
+          $ref: '#/components/responses/DeletedObject'
+        '404':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+  /buildings/{buildingId}/floors:
+    parameters:
+    - $ref: '#/components/parameters/BuildingId'
+    get:
+      description: Get all floors
+      operationId: getFloors
+      tags:
+      - floors
+      parameters:
+      - $ref: '#/components/parameters/FloorName'
+      - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          $ref: '#/components/responses/FloorCollection'
+        '404':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+    post:
+      description: Create a floor
+      operationId: createFloor
+      tags:
+      - floors
+      requestBody:
+        $ref: '#/components/requestBodies/Floor'
+      responses:
+        '201':
+          $ref: '#/components/responses/Floor'
+        '404':
+          $ref: '#/components/responses/DefaultProblem'
+        '422':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+  /buildings/{buildingId}/floors/{floorIdTmp}:
+    parameters:
+    - $ref: '#/components/parameters/BuildingId'
+    - $ref: '#/components/parameters/FloorIdTmp'
+    get:
+      description: Info for a specific floor
+      operationId: getFloorById
+      tags:
+      - floors
+      responses:
+        '200':
+          $ref: '#/components/responses/Floor'
+        '404':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+    put:
+      description: update a specific floor
+      operationId: updateFloor
+      tags:
+      - floors
+      requestBody:
+        $ref: '#/components/requestBodies/Floor'
+      responses:
+        '201':
+          $ref: '#/components/responses/Floor'
+        '404':
+          $ref: '#/components/responses/DefaultProblem'
+        '422':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+    delete:
+      description: delete a floor
+      operationId: deleteFloor
+      tags:
+      - floors
+      responses:
+        '204':
+          $ref: '#/components/responses/DeletedObject'
+        '404':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+  /categories:
+    get:
+      description: Get all categories
+      operationId: getCategories
+      tags:
+      - categories
+      parameters:
+      - $ref: '#/components/parameters/CategoryName'
+      - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          $ref: '#/components/responses/CategoryCollection'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+    post:
+      description: Create a category
+      operationId: createCategory
+      tags:
+      - categories
+      requestBody:
+        $ref: '#/components/requestBodies/Category'
+      responses:
+        '201':
+          $ref: '#/components/responses/Category'
+        '422':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+  /categories/{categoryId}:
+    parameters:
+    - $ref: '#/components/parameters/CategoryId'
+    get:
+      description: Info for a specific Category
+      operationId: getCategoryById
+      tags:
+      - categories
+      responses:
+        '200':
+          $ref: '#/components/responses/Category'
+        '404':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+    put:
+      description: update a specific category
+      operationId: updateCategory
+      tags:
+      - categories
+      requestBody:
+        $ref: '#/components/requestBodies/Category'
+      responses:
+        '201':
+          $ref: '#/components/responses/Category'
+        '404':
+          $ref: '#/components/responses/DefaultProblem'
+        '422':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+    delete:
+      description: delete a category
+      operationId: deleteCategory
+      tags:
+      - categories
+      responses:
+        '204':
+          $ref: '#/components/responses/DeletedObject'
+        '404':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+  /bookings:
+    get:
+      description: Get all bookings
+      operationId: getBookings
+      tags:
+      - bookings
+      parameters:
+      - $ref: '#/components/parameters/BookingRoomId'
+      - $ref: '#/components/parameters/BookingUserId'
+      - $ref: '#/components/parameters/BookingSeries'
+      - $ref: '#/components/parameters/Sort'
+      responses:
+        '200':
+          $ref: '#/components/responses/BookingCollection'
+    post:
+      description: Create a booking
+      operationId: createBooking
+      tags:
+      - bookings
+      requestBody:
+        $ref: '#/components/requestBodies/Booking'
+      responses:
+        '201':
+          description: if a series was created, multiple bookings will be returned
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - $ref: '#/components/schemas/BookingCollection'
+                - $ref: '#/components/schemas/Booking'
+        '409':
+          $ref: '#/components/responses/DefaultProblem'
+        '422':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+  /bookings/{bookingId}:
+    parameters:
+    - $ref: '#/components/parameters/BookingId'
+    get:
+      description: Info for a specific booking
+      operationId: getBookingById
+      tags:
+      - bookings
+      responses:
+        '200':
+          $ref: '#/components/responses/Booking'
+        '404':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+    delete:
+      description: delete a booking
+      operationId: deleteBooking
+      tags:
+      - bookings
+      parameters:
+      - name: deleteSeries
+        in: query
+        required: false
+        description: flag wether to delete the complete series this booking belongs
+          to.
+        schema:
+          type: boolean
+      responses:
+        '204':
+          $ref: '#/components/responses/DeletedObject'
+        '404':
+          $ref: '#/components/responses/DefaultProblem'
+        default:
+          $ref: '#/components/responses/DefaultProblem'
+components:
+  securitySchemes:
+    SecurityToken:
+      $ref: '#/components/securitySchemes/BaseOneSecurityToken'
+    BaseOneSecurityToken:
+      type: http
+      scheme: baseone
+  parameters:
+    RoomName:
+      name: name
+      in: query
+      required: false
+      schema:
+        type: string
+    RoomNumber:
+      name: number
+      in: query
+      required: false
+      schema:
+        type: string
+    RoomCategoryId:
+      name: categoryId
+      in: query
+      required: false
+      schema:
+        type: integer
+    Sort:
+      name: sort
+      in: query
+      required: false
+      description: Comma seperated list of fields to sort by. Put `-` / `+` (default)
+        before a field name to indicate descending / ascending sorting.
+      schema:
+        type: string
+        example: -date,name,+age
+    RoomId:
+      name: roomId
+      in: path
+      required: true
+      description: The id of the room to retrieve
+      schema:
+        type: integer
+    BuildingName:
+      name: name
+      in: query
+      required: false
+      schema:
+        type: string
+    BuildingId:
+      name: buildingId
+      in: path
+      required: true
+      description: The id of the building to retrieve
+      schema:
+        type: integer
+    FloorName:
+      name: nameFloor
+      in: query
+      required: false
+      schema:
+        type: string
+    FloorIdTmp:
+      name: floorIdTmp
+      in: path
+      required: true
+      description: floor id tmp
+      schema:
+        type: integer
+    FloorId:
+      name: floorId
+      in: path
+      required: true
+      description: The id of the floor to retrieve
+      schema:
+        type: integer
+    CategoryName:
+      name: name
+      in: query
+      required: false
+      schema:
+        type: string
+    CategoryId:
+      name: categoryId
+      in: path
+      required: true
+      description: The id of the category to retrieve
+      schema:
+        type: integer
+    BookingRoomId:
+      name: roomId
+      in: query
+      required: false
+      schema:
+        type: integer
+    BookingUserId:
+      name: userId
+      in: query
+      required: false
+      schema:
+        type: integer
+    BookingSeries:
+      name: series
+      in: query
+      required: false
+      schema:
+        type: string
+    BookingId:
+      name: bookingId
+      in: path
+      required: true
+      description: The id of the booking to retrieve
+      schema:
+        type: integer
+  responses:
+    RoomCollection:
+      description: collection of rooms
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RoomCollection'
+    DefaultProblem:
+      description: a problem occurred
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/DefaultProblem'
+    Room:
+      description: single room
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RoomDetailed'
+    DeletedObject:
+      description: the object was successfully deleted
+    BuildingCollection:
+      description: collection of buildings
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BuildingCollection'
+    Building:
+      description: single building
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BuildingDetailed'
+    FloorCollection:
+      description: collection of floors
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FloorCollection'
+    Floor:
+      description: single floor
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/FloorDetailed'
+    CategoryCollection:
+      description: collection of categories
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CategoryCollection'
+    Category:
+      description: single category
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CategoryDetailed'
+    BookingCollection:
+      description: collection of bookings
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/BookingCollection'
+    Booking:
+      description: single booking
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Booking'
+  schemas:
+    RoomCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Room'
+      required:
+      - data
+    Room:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: id of the object
+          example: 1
+        number:
+          type: string
+          description: room number
+          example: A 1.02
+          minLength: 0
+          maxLength: 20
+        name:
+          type: string
+          description: name of the room
+          example: Borkum
+          minLength: 2
+          maxLength: 255
+        bookable:
+          type: boolean
+          description: wether this room can be booked or not
+          example: true
+        capacity:
+          type: integer
+          description: number of people fitting in that room
+          example: 30
+          minimum: 0
+          maximum: 1000
+        floorId:
+          type: integer
+          writeOnly: true
+          description: id of the floor this room is in
+          example: 1
+        floorIdTmp:
+          type: integer
+          writeOnly: true
+          description: id of the floor this room is in
+          example: 1
+        categoryId:
+          type: integer
+          writeOnly: true
+          description: id of the category this room belongs to
+          example: 1
+      required:
+      - number
+      - bookable
+      - capacity
+      - floorId
+      - floorIdTmp
+      - floors
+      - categoryId
+      - categories
+    DefaultProblem:
+      type: object
+      required:
+      - type
+      - status
+      - title
+      properties:
+        status:
+          type: integer
+          format: int32
+          description: HTTP status code returned for the problem.
+          example: 400
+        type:
+          type: string
+          format: url
+          description: URI pointing to a human readable documentation.
+          example: https://docs.api.nordlb.de/problems/email-already-taken
+          default: about:blank
+        title:
+          type: string
+          description: Short, human readable description of the problem.
+          example: The provided e-mail address is already taken.
+        detail:
+          type: string
+          description: Human readable explanation of the problem.
+          example: The e-mail adress serves as an identifier and thus can only be
+            taken once.
+        instance:
+          type: string
+          description: Endpoint where the problem occurred.
+          example: /users
+    RoomDetailed:
+      allOf:
+      - $ref: '#/components/schemas/Room'
+      - type: object
+        properties:
+          floors:
+            readOnly: true
+            allOf:
+            - $ref: '#/components/schemas/FloorCollection'
+          categories:
+            readOnly: true
+            allOf:
+            - $ref: '#/components/schemas/CategoryCollection'
+    FloorCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Floor'
+      required:
+      - data
+    Floor:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: id of the object
+          example: 1
+        name:
+          type: string
+          description: name of the floor
+          example: base level
+          minLength: 2
+          maxLength: 255
+        level:
+          type: number
+          description: level this floor is in
+          example: 0
+          minimum: -100
+          maximum: 100
+        buildingId:
+          type: integer
+          writeOnly: true
+          description: id of the building this floor is in
+          example: 1
+        description:
+          type: string
+          description: further information
+          example: has a big TV
+      required:
+      - name
+      - level
+      - buildingId
+    CategoryCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Category'
+      required:
+      - data
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: id of the object
+          example: 1
+        name:
+          type: string
+          description: name of the category
+          example: meeting rooms
+          minLength: 2
+          maxLength: 255
+      required:
+      - name
+    RoomSearch:
+      type: object
+      properties:
+        logicalOperator:
+          $ref: '#/components/schemas/LogicalOperatorProperty'
+        searchCriteriaGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchCriteriaGroup'
+      required:
+      - logicalOperator
+      - searchCriteriaGroups
+    LogicalOperatorProperty:
+      description: search operator for combinations of logical conditions
+      type: string
+      x-extensible-enum:
+      - and
+      - or
+      example: and
+    SearchCriteriaGroup:
+      type: object
+      properties:
+        logicalOperator:
+          $ref: '#/components/schemas/LogicalOperatorProperty'
+        searchCriteria:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchCriterion'
+      required:
+      - logicalOperator
+      - searchCriteria
+    SearchCriterion:
+      type: object
+      properties:
+        criterionName:
+          type: string
+      discriminator:
+        propertyName: criterionName
+        mapping:
+          FloorSearchCriterion: '#/components/schemas/FloorSearchCriterion'
+          CapacitySearchCriterion: '#/components/schemas/CapacitySearchCriterion'
+          CategorySearchCriterion: '#/components/schemas/CategorySearchCriterion'
+    BuildingCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Building'
+      required:
+      - data
+    Building:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: id of the object
+          example: 1
+        description:
+          type: string
+          description: further information
+          example: has a nice entry
+      required:
+      - name
+    BuildingDetailed:
+      allOf:
+      - $ref: '#/components/schemas/Building'
+      - type: object
+        properties:
+          floors:
+            readOnly: true
+            allOf:
+            - $ref: '#/components/schemas/FloorCollection'
+    FloorDetailed:
+      allOf:
+      - $ref: '#/components/schemas/Floor'
+      - type: object
+        properties:
+          building:
+            readOnly: true
+            allOf:
+            - $ref: '#/components/schemas/Building'
+    CategoryDetailed:
+      allOf:
+      - $ref: '#/components/schemas/Category'
+      - type: object
+        properties:
+          rooms:
+            readOnly: true
+            allOf:
+            - $ref: '#/components/schemas/RoomCollection'
+    BookingCollection:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Booking'
+      required:
+      - data
+    Booking:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          description: id of the object
+          example: 1
+        roomId:
+          type: integer
+          writeOnly: true
+          description: id of the room this booking is for
+          example: 1
+        userId:
+          type: string
+          format: uuid
+          description: uuid of the user that this booking is for
+          example: 550e8400-e29b-11d4-a716-446655440000
+        bookerId:
+          type: string
+          format: uuid
+          readOnly: true
+          description: uuid of the user that created this booking
+          example: 550e8400-e29b-11d4-a716-446655440001
+        date:
+          type: string
+          format: date
+          description: date of the booking
+          example: '2020-04-21'
+        start:
+          type: integer
+          description: number of the timeslot where the booking starts
+          example: 2
+        end:
+          type: integer
+          description: number of the timeslot where the booking ends
+          example: 5
+        reason:
+          type: string
+          description: reason for the booking
+          example: internal meeting
+        repeatInterval:
+          type: integer
+          writeOnly: true
+          description: amount of days between repetition. if this is set, either repeatFor
+            or repeatUntil must be set.
+          example: 7
+          minimum: 1
+          maximum: 28
+        repeatFor:
+          type: integer
+          writeOnly: true
+          description: amount of repetitions. if this is set, repeatUntil will be
+            ignored.
+          example: 3
+          minimum: 2
+          maximum: 10
+        repeatUntil:
+          type: string
+          format: date
+          writeOnly: true
+          description: date until the series should be repeatedasdf
+          example: '2020-05-21'
+        series:
+          type: string
+          readOnly: true
+          description: random string to identify bookings belonging to the same series
+          example: c8d60b92fe
+          minLength: 10
+          maxLength: 10
+      required:
+      - roomId
+      - userId
+      - bookerId
+      - date
+      - start
+      - end
+  requestBodies:
+    Room:
+      required: true
+      description: room to add
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Room'
+    RoomSearch:
+      required: true
+      description: filter for the room search
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RoomSearch'
+          examples:
+            AndSearchExample:
+              description: search for a meeting room on the 1.- 3. floor for 100 -
+                200 persons
+              value:
+                logicalOperator: and
+                searchCriteriaGroups:
+                - logicalOperator: and
+                  searchCriteria:
+                  - criterionName: FloorSearchCriterion
+                    levelIn:
+                    - 1
+                    - 2
+                    - 3
+                  - criterionName: CapacitySearchCriterion
+                    capacityFrom: 100
+                    capacityTo: 200
+                  - criterionName: CategorySearchCriterion
+                    roomCategoryLike: meeting rooms
+            OrSearchExample:
+              description: search for a meeting room or a lab for 10 till 20 persons
+              value:
+                logicalOperator: and
+                searchCriteriaGroups:
+                - logicalOperator: or
+                  searchCriteria:
+                  - criterionName: CategorySearchCriterion
+                    roomCategoryLike: meeting rooms
+                  - criterionName: CategorySearchCriterion
+                    roomCategoryLike: labs
+                - logicalOperator: and
+                  searchCriteria:
+                  - criterionName: CapacitySearchCriterion
+                    capacityFrom: 10
+                    capacityTo: 20
+    Building:
+      required: true
+      description: building to add
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Building'
+    Floor:
+      required: true
+      description: floor to add
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Floor'
+    Category:
+      required: true
+      description: category to add
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Category'
+    Booking:
+      required: true
+      description: booking to add
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Booking'
