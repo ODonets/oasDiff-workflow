@@ -1,6 +1,7 @@
 # API-Workflow 2.1.0
 name: The API Workflow
-on: workflow_dispatch:
+on: 
+  workflow_dispatch:
 
 jobs:
   openapi-diff:
