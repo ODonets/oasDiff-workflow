@@ -12,8 +12,11 @@ jobs:
       - id: test
         uses: ODonets/oasDiff-action@main
 
-
-
-
-
-
+      - name: Upload change log
+        uses: actions/upload-artifact@v2
+        env:
+          CHANGE_LOG_ARTIFACT_NAME: change-log
+          CHANGE_LOG_ARTIFACT_FILENAME: changeLog.md
+        with:
+          name: ${{ env.CHANGE_LOG_ARTIFACT_NAME }}
+          path: ${{ env.CHANGE_LOG_ARTIFACT_FILENAME }}
