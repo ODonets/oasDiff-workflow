@@ -15,8 +15,9 @@ jobs:
       - name: Upload change log
         uses: actions/upload-artifact@v2
         env:
+          CHANGE_LOG_PATH: oas
           CHANGE_LOG_ARTIFACT_NAME: change-log
-          CHANGE_LOG_ARTIFACT_FILENAME: changeLog.md
+          CHANGE_LOG_ARTIFACT_FILENAME: change-log.md
         with:
           name: ${{ env.CHANGE_LOG_ARTIFACT_NAME }}
-          path: ${{ env.CHANGE_LOG_ARTIFACT_FILENAME }}
+          path: ${{ env.CHANGE_LOG_PATH }}/${{ env.CHANGE_LOG_ARTIFACT_FILENAME }}
