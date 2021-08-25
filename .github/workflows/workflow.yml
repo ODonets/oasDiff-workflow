@@ -13,6 +13,7 @@ jobs:
         uses: ODonets/oasDiff-action@main
 
       - name: Upload change log
+        if: ${{ always() }}
         uses: actions/upload-artifact@v2
         env:
           CHANGE_LOG_PATH: oas
